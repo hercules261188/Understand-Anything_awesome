@@ -103,3 +103,19 @@ Start the Understand Anything dashboard to visualize the knowledge graph for the
 - The dashboard auto-opens in the default browser via `--open`
 - If port 5173 is already in use, Vite will pick the next available port
 - The `GRAPH_DIR` environment variable tells the dashboard where to find the knowledge graph
+
+### Serving from a remote VM
+
+By default the dev server binds to `127.0.0.1` and Vite rejects requests whose `Host` header is a domain name with `Blocked request. This host ("example.com") is not allowed.` To serve the dashboard from a remote machine accessed via a domain or public IP, set these environment variables before launching Vite:
+
+```bash
+GRAPH_DIR=<project-dir> \
+UNDERSTAND_HOST=0.0.0.0 \
+UNDERSTAND_ALLOWED_HOSTS=example.com,example1.com \
+npx vite
+```
+
+- `UNDERSTAND_HOST` — bind address (use `0.0.0.0` to accept connections from outside localhost). Equivalent to `--host`.
+- `UNDERSTAND_ALLOWED_HOSTS` — comma-separated list of allowed `Host` headers. Use `all` (or `true`/`*`) to disable the check entirely. Leave unset to keep the strict localhost-only default.
+
+The one-time access token is still required, so only people with the tokenized URL can read the knowledge graph.
