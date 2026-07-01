@@ -208,6 +208,7 @@ export class TypeScriptExtractor implements LanguageExtractor {
         this.extractFunction(node, functions);
         break;
 
+      case "abstract_class_declaration":
       case "class_declaration":
         this.extractClass(node, classes);
         break;
@@ -416,6 +417,7 @@ export class TypeScriptExtractor implements LanguageExtractor {
           break;
         }
 
+        case "abstract_class_declaration":
         case "class_declaration": {
           this.extractClass(child, classes);
           const nameNode = child.children.find(
