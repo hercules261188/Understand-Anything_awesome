@@ -411,7 +411,7 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
   },
 
   navigateToNodeInLayer: (nodeId) => {
-    const { graph, selectedNodeId, nodeHistory, nodeIdToLayerId } = get();
+    const { graph, selectedNodeId, nodeHistory, nodeIdToLayerId, activeLayerId } = get();
     if (!graph) return;
     const layerId = nodeIdToLayerId.get(nodeId) ?? null;
     const newHistory =
@@ -419,15 +419,19 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
         ? [...nodeHistory, selectedNodeId].slice(-MAX_HISTORY)
         : nodeHistory;
     if (layerId) {
-      set({
-        navigationLevel: "layer-detail",
+      const layerNav = {
+        navigationLevel: "layer-detail" as const,
         activeLayerId: layerId,
+      };
+      set({
+        ...layerNav,
         selectedNodeId: nodeId,
         focusNodeId: null,
         codeViewerOpen: false,
         codeViewerNodeId: null,
         codeViewerExpanded: false,
         nodeHistory: newHistory,
+        ...layerResetIfChanged(layerNav, activeLayerId),
       });
     } else {
       set({
@@ -438,30 +442,38 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
   },
 
   navigateToHistoryIndex: (index) => {
-    const { nodeHistory, graph, nodeIdToLayerId } = get();
+    const { nodeHistory, graph, nodeIdToLayerId, activeLayerId } = get();
     if (!graph || index < 0 || index >= nodeHistory.length) return;
     const targetId = nodeHistory[index];
     const newHistory = nodeHistory.slice(0, index);
     const layerId = nodeIdToLayerId.get(targetId) ?? null;
+    const layerNav = layerId
+      ? { navigationLevel: "layer-detail" as const, activeLayerId: layerId }
+      : {};
     set({
       selectedNodeId: targetId,
       nodeHistory: newHistory,
-      ...(layerId ? { navigationLevel: "layer-detail" as const, activeLayerId: layerId } : {}),
+      ...layerNav,
+      ...layerResetIfChanged(layerNav, activeLayerId),
     });
   },
 
   goBackNode: () => {
-    const { nodeHistory, graph, nodeIdToLayerId } = get();
+    const { nodeHistory, graph, nodeIdToLayerId, activeLayerId } = get();
     if (nodeHistory.length === 0 || !graph) return;
     const prevNodeId = nodeHistory[nodeHistory.length - 1];
     const newHistory = nodeHistory.slice(0, -1);
     const layerId = nodeIdToLayerId.get(prevNodeId) ?? null;
     if (layerId) {
-      set({
-        navigationLevel: "layer-detail",
+      const layerNav = {
+        navigationLevel: "layer-detail" as const,
         activeLayerId: layerId,
+      };
+      set({
+        ...layerNav,
         selectedNodeId: prevNodeId,
         nodeHistory: newHistory,
+        ...layerResetIfChanged(layerNav, activeLayerId),
       });
     } else {
       set({
