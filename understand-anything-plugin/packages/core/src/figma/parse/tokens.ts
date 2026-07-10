@@ -47,7 +47,13 @@ export function extractTokens(
     // relationships aren't dropped when the styled layer isn't itself a node.
     const consumerId = graphIdByFigmaId.get(n.id) ?? nearestConsumerId;
     if (consumerId && n.styles) {
-      for (const styleKey of Object.values(n.styles)) {
+      for (const localStyleId of Object.values(n.styles)) {
+        // node.styles values are file-local style ids (e.g. "2:10") that
+        // index the document's top-level styles map, while token nodes are
+        // keyed by the global published key from /files/:key/styles. Bridge
+        // local id → published key; fall back to a direct match for sources
+        // that don't provide the top-level map.
+        const styleKey = doc.styles?.[localStyleId]?.key ?? localStyleId;
         const tokenId = tokenByStyleKey.get(styleKey);
         if (tokenId) {
           const dedupe = `${consumerId}|${tokenId}`;
