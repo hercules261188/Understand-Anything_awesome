@@ -13,7 +13,7 @@ export type Persona = "non-technical" | "junior" | "experienced";
 export type NavigationLevel = "overview" | "layer-detail";
 export type NodeType = "file" | "function" | "class" | "module" | "concept" | "config" | "document" | "service" | "table" | "endpoint" | "pipeline" | "schema" | "resource" | "domain" | "flow" | "step" | "article" | "entity" | "topic" | "claim" | "source" | "page" | "screen" | "component" | "componentSet" | "instance" | "token";
 export type Complexity = "simple" | "moderate" | "complex";
-export type EdgeCategory = "structural" | "behavioral" | "data-flow" | "dependencies" | "semantic" | "infrastructure" | "domain" | "knowledge";
+export type EdgeCategory = "structural" | "behavioral" | "data-flow" | "dependencies" | "semantic" | "infrastructure" | "domain" | "knowledge" | "design";
 export type ViewMode = "structural" | "domain" | "knowledge";
 export type DetailLevel = "file" | "class";
 
@@ -26,7 +26,7 @@ export interface FilterState {
 
 export const ALL_NODE_TYPES: NodeType[] = ["file", "function", "class", "module", "concept", "config", "document", "service", "table", "endpoint", "pipeline", "schema", "resource", "domain", "flow", "step", "article", "entity", "topic", "claim", "source", "page", "screen", "component", "componentSet", "instance", "token"];
 export const ALL_COMPLEXITIES: Complexity[] = ["simple", "moderate", "complex"];
-export const ALL_EDGE_CATEGORIES: EdgeCategory[] = ["structural", "behavioral", "data-flow", "dependencies", "semantic", "infrastructure", "domain", "knowledge"];
+export const ALL_EDGE_CATEGORIES: EdgeCategory[] = ["structural", "behavioral", "data-flow", "dependencies", "semantic", "infrastructure", "domain", "knowledge", "design"];
 
 export const EDGE_CATEGORY_MAP: Record<EdgeCategory, string[]> = {
   structural: ["imports", "exports", "contains", "inherits", "implements"],
@@ -37,6 +37,7 @@ export const EDGE_CATEGORY_MAP: Record<EdgeCategory, string[]> = {
   infrastructure: ["deploys", "serves", "provisions", "triggers", "migrates", "documents", "routes", "defines_schema"],
   domain: ["contains_flow", "flow_step", "cross_domain"],
   knowledge: ["cites", "contradicts", "builds_on", "exemplifies", "categorized_under", "authored_by"],
+  design: ["instance_of", "variant_of", "uses_token"],
 };
 
 export const DOMAIN_EDGE_TYPES = EDGE_CATEGORY_MAP.domain;
