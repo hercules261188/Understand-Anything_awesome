@@ -217,6 +217,11 @@ describe("generateStarterIgnoreFile", () => {
       expect(content).toContain("# **/*_test.py");
     });
 
+    it("includes Django's single-file tests.py convention", () => {
+      const content = generateStarterIgnoreFile(testDir);
+      expect(content).toContain("# **/tests.py");
+    });
+
     it("groups patterns under the JS / TS sub-header", () => {
       const content = generateStarterIgnoreFile(testDir);
       expect(content).toContain("# JS / TS");

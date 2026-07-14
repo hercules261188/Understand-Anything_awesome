@@ -103,6 +103,7 @@ const TEST_PATTERN_GROUPS: Array<{ label: string; patterns: string[] }> = [
     patterns: [
       "**/test_*.py",
       "**/*_test.py",
+      "**/tests.py",
     ],
   },
 ];
